@@ -15,7 +15,7 @@ void divide(double** matrix, int row, double coefficient, int columns) /*1. На
   }
 }
 
-void subtract(double** matrix, int row1, int row2, double coefficient) /*2. Написать функцию subtract, принимающую в качестве параметров двумерный массив, два целых числа (номера строк) и вещественное число (коэффици-
+void subtract(double** matrix, int row1, int row2, double coefficient, int columns) /*2. Написать функцию subtract, принимающую в качестве параметров двумерный массив, два целых числа (номера строк) и вещественное число (коэффици-
 ент), и вычитающую поэлементно в массиве-параметре строку с первым номером, умноженную на коэффициент, из строки со вторым номером.*/
 {
   for (int i = 0; i < columns; i++)
@@ -27,10 +27,11 @@ void subtract(double** matrix, int row1, int row2, double coefficient) /*2. На
 void transform(double** matrix, int rows, int columns) /*3. Написать функцию transform, приводящую матрицу из вещественных чисел к единичному виду при помощи элементарных преобразований над строками
 (алгоритм описан в абзаце перед задачами; также нужно использовать функции из задач 1 и 2).*/
 {
-  for (int i = 0; i < rows; i++)
+ 
+    for (int i = 0; i < columns-1; i++)
   {
     divide(matrix, i, matrix[i][i], columns);
-    for (int j = 0; j < rows; j++)
+    for (int j = 0; j < rows-1; j++)
     {
       if (j != i)
       {
@@ -38,12 +39,20 @@ void transform(double** matrix, int rows, int columns) /*3. Написать ф�
       }
     }
   }
+  
 }
 
 void slau(double** matrix, int rows, int columns) /*4. Воспользовавшись результатами предыдущих задач, написать функцию, решающую систему линейных уравнений с заданной расширенной матрицей системы методом Гаусса-Жордана.*/
 {
   transform(matrix, rows, columns - 1);
   
+     for (i=0; i<columns-1; i++)
+       {
+          for (j=i+1;j<rows-1;j++)
+             { 
+               substract (matrix, i, j, matrix[j][i], columns)
+             }
+       }
   cout << "Решение системы линейных уравнений:" << endl;
   for (int i = 0; i < rows; i++)
   {
@@ -53,21 +62,19 @@ void slau(double** matrix, int rows, int columns) /*4. Воспользовав�
 
 void slaupar(double** matrix, int rows, int columns) /*5. Распараллелить полученную программу для решения системы линейных уравнений при помощи OpenMP, используя директиву parallel for.*/
 {
+    transform(matrix, rows, columns - 1);
+  #pragma omp parallel for
+     for (i=0; i<columns-1; i++)
+       {
+          for (j=i+1;j<rows-1;j++)
+             { 
+               substract (matrix, i, j, matrix[j][i], columns)
+             }
+       }
+  cout << "Решение системы линейных уравнений:" << endl;
   for (int i = 0; i < rows; i++)
   {
-    divide(matrix, i, matrix[i][i], columns);
-    #pragma omp parallel for collapse (2)
-    for (int j = 0; j < rows; j++)
-    {
-      if (j != i)
-      {
-        subtract(matrix, i, j, matrix[j][i], columns);
-      }
-    }
-  }
-  for (int i = 0; i < rows; i++)
-  {
-   cout << "x" << i + 1 << " = " << matrix[i][columns - 1] << endl;
+    cout << "x" << i + 1 << " = " << matrix[i][columns - 1] << endl;
   }
 }
 

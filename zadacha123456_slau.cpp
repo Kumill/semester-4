@@ -2,8 +2,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <omp.h>
+
 using namespace std;
-setlocale(LC_ALL, "Russian");
+
 
 void divide(double** matrix, int row, double coefficient, int columns) /*1. Написать функцию divide, принимающую в качестве параметров двумер-
 ный массив (матрицу), номер строчки и вещественное число (коэффициент).Функция должна разделить все элементы соответствующей строчки на соответствующий коэффициент.*/

@@ -9,15 +9,15 @@ using namespace std;
 using namespace chrono_literals;
 
 mutex m;
-int object; // ╨║╨╛╨┤ ╤В╨╛╨▓╨░╤А╨░
-bool flag = false; // true -- ╤Б╨║╨╗╨░╨┤ ╨╖╨░╨┐╨╛╨╗╨╜╨╡╨╜, false -- ╤Б╨║╨╗╨░╨┤ ╨┐╤Г╤Б╤В
+int object; 
+bool flag = false;
 bool work1 = true, work2 = true;
 vector<int> v1, v2;
 
 void factory() {
     mt19937 mt;
     uniform_int_distribution<> dist(0, 100);
-    while (work2) {
+    while (work1) {
         if (flag)
             this_thread::sleep_for(chrono::milliseconds(dist(mt)));
         else {

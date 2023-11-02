@@ -29,7 +29,7 @@ void transform(double** matrix, int rows, int columns) /*3. Написать ф�
 {
   for (int i = 0; i < rows; i++)
   {
-    divide(matrix, i, matrix[i][i]);
+    divide(matrix, i, matrix[i][i], columns);
     for (int j = 0; j < rows; j++)
     {
       if (j != i)
@@ -53,8 +53,18 @@ void slau(double** matrix, int rows, int columns) /*4. Воспользовав�
 
 void slaupar(double** matrix, int rows, int columns) /*5. Распараллелить полученную программу для решения системы линейных уравнений при помощи OpenMP, используя директиву parallel for.*/
 {
-  transform(matrix, rows, columns - 1);
-  #pragma omp parallel for
+  for (int i = 0; i < rows; i++)
+  {
+    divide(matrix, i, matrix[i][i], columns);
+    #pragma omp parallel for collapse (2)
+    for (int j = 0; j < rows; j++)
+    {
+      if (j != i)
+      {
+        subtract(matrix, i, j, matrix[j][i], columns);
+      }
+    }
+  }
   for (int i = 0; i < rows; i++)
   {
    cout << "x" << i + 1 << " = " << matrix[i][columns - 1] << endl;
